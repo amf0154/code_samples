@@ -1,0 +1,147 @@
+<div [attr.aut-id]="autId">
+    <div class="dual-list">
+        <div class="listbox {{ inputListClasses }}">
+            <div attr.aut-id="listbox1-header-{{ autId }}" class="header">
+                <div attr.aut-id="listbox1-name-{{ autId }}" class="listbox-name col-12 col-sm-24">
+                    <label for="listbox1-filter" attr.aut-id="listbox1-name-label-{{ autId }}">{{ listName }}</label>
+                </div>
+                <button
+                    (click)="selectDeselect(available)"
+                    aria-label="select or deselect all items from available list of items"
+                    attr.aut-id="select-btn-listbox1-{{ autId }}"
+                    class="btn btn--link select-btn"
+                >
+                    Select / Deselect All
+                </button>
+            </div>
+            <form *ngIf="filter" class="filter">
+                <input
+                    class="form-control filter-form"
+                    aria-label="filter for available list of items"
+                    attr.aut-id="listbox1-filter-{{ autId }}"
+                    id="listbox1-filter"
+                    placeholder="Type to filter"
+                    name="filterSource"
+                    [(ngModel)]="available.picker"
+                    (ngModelChange)="onFilter(available)"
+                />
+            </form>
+
+            <div tabindex="0" class="record-picker">
+                <ul
+                    role="list"
+                    name="departmentListAvailable"
+                    attr.aut-id="listbox1-list-{{ autId }}"
+                    [ngClass]="{ over: available.dragOver }"
+                    (drop)="drop($event, confirmed)"
+                    (dragover)="allowDrop($event, available)"
+                    (dragleave)="dragLeave()"
+                >
+                    <li
+                        role="listitem"
+                        *ngFor="let item of available.sift; let idx = index"
+                        (click)="
+                            disabled ? null : selectItem(available.pick, item); shiftClick($event, idx, available, item)
+                        "
+                        attr.aut-id="listbox1-list-item-{{ autId }}-{{ idx }}"
+                        [ngClass]="{ selected: isItemSelected(available.pick, item), disabled: disabled }"
+                        [draggable]="!disabled && draggable"
+                        (dragstart)="drag($event, item, available)"
+                        (dragend)="dragEnd(available)"
+                    >
+                        <label attr.aut-id="listbox1-list-label-{{ autId }}-{{ idx }}">{{ item._name }}</label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="move-buttons {{ inputMoveButtonsClasses }}">
+            <button
+                type="button"
+                name="addBtn"
+                class="btn btn--link btn-move"
+                (click)="moveItem(available, confirmed)"
+                attr.aut-id="btn-add-{{ autId }}"
+                aria-label="move selected items to confirmed list"
+                [disabled]="disabled && available.pick.length === 0"
+            >
+                <i class="icon icon-chevron-right"></i>
+            </button>
+            <button
+                type="button"
+                name="removeBtn"
+                class="btn btn--link btn-move"
+                (click)="moveItem(confirmed, available)"
+                attr.aut-id="btn-remove-{{ autId }}"
+                aria-label="move selected items to available list back"
+                [disabled]="disabled && confirmed.pick.length === 0"
+            >
+                <i class="icon icon-chevron-left"></i>
+            </button>
+        </div>
+
+        <div class="listbox {{ inputListClasses }}">
+            <div attr.aut-id="listbox2-header-{{ autId }}" class="header">
+                <div attr.aut-id="listbox2-name-{{ autId }}" class="listbox-name col-12 col-sm-24">
+                    <label for="listbox2-filter" attr.aut-id="listbox2-name-label-{{ autId }}">
+                        Selected {{ listName }}
+                    </label>
+                </div>
+                <button
+                    (click)="selectDeselect(confirmed)"
+                    class="btn btn--link select-btn"
+                    aria-label="select or deselect all items from list of confirmed items"
+                    attr.aut-id="listbox2-select-btn-{{ autId }}"
+                >
+                    Select / Deselect All
+                </button>
+            </div>
+
+            <form *ngIf="filter" class="filter">
+                <input
+                    class="form-control filter-form"
+                    aria-label="filter for confirmed items"
+                    attr.aut-id="listbox2-filter-{{ autId }}"
+                    id="listbox2-filter"
+                    placeholder="Type to filter"
+                    name="filterDestination"
+                    [(ngModel)]="confirmed.picker"
+                    (ngModelChange)="onFilter(confirmed)"
+                />
+            </form>
+
+            <div tabindex="0" class="record-picker">
+                <ul
+                    role="list"
+                    name="departmentListSelected"
+                    attr.aut-id="listbox2-list-{{ autId }}"
+                    [ngClass]="{ over: confirmed.dragOver }"
+                    (drop)="drop($event, available)"
+                    (dragover)="allowDrop($event, confirmed)"
+                    (dragleave)="dragLeave()"
+                >
+                    <li
+                        role="listitem"
+                        #itmConf
+                        *ngFor="let item of confirmed.sift; let idx = index"
+                        (click)="
+                            disabled ? null : selectItem(confirmed.pick, item); shiftClick($event, idx, confirmed, item)
+                        "
+                        attr.aut-id="listbox2-list-item-{{ autId }}-{{ idx }}"
+                        [ngClass]="{ selected: isItemSelected(confirmed.pick, item), disabled: disabled }"
+                        [draggable]="!disabled && draggable"
+                        (dragstart)="drag($event, item, confirmed)"
+                        (dragend)="dragEnd(confirmed)"
+                    >
+                        <label attr.aut-id="listbox2-list-label-{{ autId }}-{{ idx }}">{{ item._name }}</label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="selection-promt">
+        <label attr.aut-id="instruction-label-{{ autId }}">
+            (Hold Shift to select multiple {{ lowerCase(listName) }})
+        </label>
+    </div>
+</div>

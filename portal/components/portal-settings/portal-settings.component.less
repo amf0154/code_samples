@@ -1,0 +1,121 @@
+@import "../../../../../../external/patternlibrary-neogov/src/css/settings/color.variables.less";
+
+.portal-settings-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    background: @outlineColorDarkBg;
+    border: 1px solid @gray-5;
+    .go-back {
+        padding: 24px 32px;
+        width: 100%;
+        border: 1px solid @gray-5;
+        height: 68px;
+    }
+    .headline {
+        margin-top: 0px;
+        font-size: 32px;
+        margin: 0;
+    }
+    .navigate {
+        min-height: 96px;
+        padding: 24px 32px;
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .control {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.and {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.admin-control {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 21px 32px 29px 40px;
+}
+.portal-details {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.label-date {
+    width: 120px;
+    margin-bottom: 0;
+}
+.details-headline {
+    margin-top: 0px;
+    font-size: 24px;
+    padding-left: 5px;
+    margin: 24px 32px 16px;
+}
+.userinfo-link {
+    color: @blue-alt-3;
+    font-size: 14px;
+    line-height: 24px;
+    padding-top: 1px;
+    margin-left: 3px;
+}
+.required-label-container {
+    margin-bottom: 24px;
+}
+.label-createdby {
+    min-width: 90px;
+    margin-bottom: 0;
+}
+.portal-detail {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    & > span {
+        padding-top: 3px;
+    }
+    @media screen and (max-width: 450px) {
+        min-width: 100%;
+    }
+}
+.warning-text {
+    display: flex;
+    align-items: center;
+    color: @red-3;
+}
+.form-title {
+    padding-left: 0px;
+}
+.buttons {
+    margin-top: 24px;
+    margin-right: 32px;
+    margin-bottom: 68px;
+}
+.go-back-btn {
+    margin-bottom: 8px;
+}
+.portal-settings-form-container {
+    border-radius: 4px;
+    border: 1px solid @gray-5;
+    box-sizing: border-box;
+    background-color: @outlineColorDarkBg;
+    padding: 32px 40px 24px 40px;
+    margin: 21px 32px 29px 40px;
+}
+.menu-link {
+    &:hover {
+        background-color: @blue-alt-3;
+    }
+    > button:hover {
+        color: white;
+    }
+}

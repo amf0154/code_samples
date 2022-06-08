@@ -1,0 +1,112 @@
+<ng-template #employeeNumberTemplate let-dataItem="dataItem">
+    <onboard-entity-url
+        [text]="dataItem.employeeNumber"
+        [entityId]="dataItem.id"
+        [autId]="'userList-employee-' + dataItem.employeeNumber"
+        [ariaLabel]="'Click to open user details of employee number ' + dataItem.employeeNumber"
+        [entityType]="entityTypes.Employee"
+    ></onboard-entity-url>
+</ng-template>
+
+<ng-template #firstNameTemplate let-dataItem="dataItem">
+    <onboard-entity-url
+        [text]="dataItem.firstName"
+        [entityId]="dataItem.id"
+        [autId]="'userList-firstname-' + dataItem.firstName"
+        [ariaLabel]="'User firstname' + dataItem.firstName + '. Click here to open user details'"
+        [entityType]="entityTypes.Employee"
+    ></onboard-entity-url>
+</ng-template>
+
+<ng-template #lastNameTemplate let-dataItem="dataItem">
+    <onboard-entity-url
+        [text]="dataItem.lastName"
+        [entityId]="dataItem.id"
+        [autId]="'userList-lastname-' + dataItem.lastName"
+        [ariaLabel]="'User lastname' + dataItem.lastName + '. Click here to open user details'"
+        [entityType]="entityTypes.Employee"
+    ></onboard-entity-url>
+</ng-template>
+
+<ng-template #departmentTemplate let-dataItem="dataItem">
+    <onboard-entity-url
+        [text]="dataItem.departmentName"
+        [entityId]="dataItem.departmentId"
+        [autId]="'userList-department-' + dataItem.departmentName"
+        [ariaLabel]="'User department' + dataItem.departmentName + '. Click here to open department details'"
+        [entityType]="entityTypes.Department"
+    ></onboard-entity-url>
+</ng-template>
+
+<ng-template #accountStatusTemplate let-dataItem="dataItem">
+    <ng-container
+        *ngIf="
+            dataItem.onlineAccessStatus == 'Send Activation' &&
+                !currentUserInfo.isImpersonated &&
+                (currentUserInfo.isHrAdmin || !dataItem.IsHrAdmin);
+            else activated
+        "
+    >
+        <neo-tooltip [text]="dataItem.onlineAccessStatus" container="body">
+            <button
+                type="button"
+                (click)="sendActivation(dataItem)"
+                class="btn btn--link btn--link-blue"
+                attr.aut-id="userList-activation-{{ dataItem.id }}"
+                attr.aria-label="Click to Send activation email to {{ dataItem.userName}}"
+                attr.title="Activate user {{ dataItem.id }}"
+            >
+                Send activation
+            </button>
+        </neo-tooltip>
+    </ng-container>
+    <ng-template #activated>
+        {{ dataItem.onlineAccessStatus }}
+    </ng-template>
+</ng-template>
+
+<ng-template #actionsTemplate let-dataItem="dataItem">
+    <div class="mod-padding-right-5 mod-display-inline-block" role="region">
+        <neo-tooltip [text]="'Edit User'">
+            <a
+                type="button"
+                class="btn btn--link"
+                [routerLink]="dataItem.id"
+                attr.aut-id="userList-edit-{{ dataItem.id }}"
+                attr.aria-label="Edit User {{ dataItem.userName}}"
+                title="Edit User"
+            >
+                <i class="icon icon-sm icon-edit"></i>
+            </a>
+        </neo-tooltip>
+    </div>
+    <div class="mod-padding-right-5 mod-display-inline-block" role="region">
+        <neo-tooltip [text]="'Password Reset'">
+            <button
+                type="button"
+                class="btn btn--link"
+                (click)="resetPasswordModal(dataItem)"
+                attr.aut-id="userList-reset-{{ dataItem.id }}"
+                aria-label="Password Reset"
+                title="Password Reset"
+            >
+                <i class="icon icon-sm icon-key"></i>
+            </button>
+        </neo-tooltip>
+    </div>
+
+    <div class="mod-padding-right-5 mod-display-inline-block" role="region">
+        <neo-tooltip [text]="dataItem.isActive ? 'Deactivate' : 'Activate'">
+            <button
+                type="button"
+                class="btn btn--link"
+                (click)="openActivateDeactivateModal(dataItem)"
+                attr.aut-id="userList-activate-{{ dataItem.id }}"
+                attr.aria-label="{{ dataItem.isActive ? 'Deactivate' : 'Activate' }}"
+                attr.title="{{ dataItem.isActive ? 'Deactivate' : 'Activate' }}"
+            >
+                <i class="icon icon-sm icon-power"></i>
+            </button>
+        </neo-tooltip>
+    </div>
+</ng-template>

@@ -1,0 +1,38 @@
+<neo-loader-wrapper [model]="loadingModel" source="assets/spinner.gif">
+    <neo-grid-v2 *ngIf="isReady" #assignmentGrid [config]="gridConfig"></neo-grid-v2>
+    <ng-template #actionsTemplate let-dataItem="dataItem">
+        <div class="action-buttons">
+            <neo-tooltip [text]="'View assignee'">
+                <button
+                    type="button"
+                    tabindex="0"
+                    class="btn btn--link"
+                    (keydown.enter)="viewAssignees(dataItem.entityId)"
+                    (click)="viewAssignees(dataItem.entityId)"
+                    attr.aut-id="portalSettings-view-{{ dataItem.id }}"
+                    aria-label="View assignee"
+                    title="View assignees"
+                >
+                    <i class="icon icon-sm icon-show icon-focus-underline"></i>
+                </button>
+            </neo-tooltip>
+            <neo-tooltip [text]="'Delete assignment'">
+                <button
+                    type="button"
+                    tabindex="0"
+                    class="btn btn--link mod-margin-left-10"
+                    attr.aut-id="portalSettings-delete-{{ dataItem.id }}"
+                    (keydown.enter)="deleteAssigneeById(dataItem.id)"
+                    (click)="deleteAssigneeById(dataItem.id)"
+                    aria-label="Delete Assignment"
+                    title="Delete Assignment"
+                >
+                    <i class="icon icon-sm icon-trash  icon-focus-underline"></i>
+                </button>
+            </neo-tooltip>
+        </div>
+    </ng-template>
+    <ng-template #leftToolbarTemplate>
+        <h1 attr.aut-id="portalSettings-{{ entityType }}-header" class="text-24 mod-margin-none">{{ title }}</h1>
+    </ng-template>
+</neo-loader-wrapper>

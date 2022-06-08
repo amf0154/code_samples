@@ -1,0 +1,174 @@
+<div aut-id="edituser-header" class="edituser-header">
+    <button
+        type="button"
+        [routerLink]="['/user']"
+        aria-label="Click here to cancel and go back to previous page"
+        aut-id="edituser-goback-btn"
+        class="btn btn--link btn--gray go-back-btn"
+    >
+        <i class="btn-link-icon icon icon-sm icon-arrow-left mod-margin-right-2"></i>
+        <span>Back to Users</span>
+    </button>
+    <h1 aut-id="edituser-headline" class="headline">Edit User</h1>
+</div>
+
+<div *ngIf="isAvailable" class="edituser-form-container">
+    <h2 aut-id="edituser-userdetail" class="h3 edituser-userdetails">User Details</h2>
+    <div class="required-label-container col-6 col-mb-24 col-xx-sm-24 mod-margin-left-2">
+        <neo-required-label></neo-required-label>
+    </div>
+    <div class="row mod-margin-left-1" *ngIf="userData.isHired">
+        <div class="row col-9 col-mb-24 col-xx-sm-12-24 mod-align-center employee-details">
+            <div class="col-14 col-lg-12 col-xl-12 user-detail">
+                <label class="label-username" aut-id="edituser-employeeName"> Employee Name: </label>
+                <a
+                    class="mod-underline userinfo-link"
+                    *ngIf="userData.employeeNumber"
+                    [routerLink]="['/employee-detail', userData.employeeId]"
+                    title="Click to see user detail"
+                    attr.aria-label="Click to see user detail of {{ userData.firstName }} {{ userData.lastName }}"
+                    aut-id="edituser-employee-name"
+                >
+                    {{ userData.firstName }} {{ userData.lastName }}
+                </a>
+            </div>
+
+            <div class="col-10 text-left user-detail">
+                <label class="label-userid" aut-id="edituser-employee"> Employee #: </label>
+                <a
+                    class="mod-underline userinfo-link"
+                    *ngIf="userData.employeeNumber"
+                    [routerLink]="['/employee-detail', userData.employeeId]"
+                    title="Click to see user detail"
+                    attr.aria-label="Click to see user detail of {{ userData.firstName }} {{ userData.lastName }}"
+                    aut-id="edituser-employee-number"
+                >
+                    {{ userData.employeeNumber }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div [formGroup]="userForm">
+        <neo-form-input
+            formControlName="userName"
+            [formControl]="userForm.controls.userName"
+            autId="edituser-username"
+            caption="Username"
+            ariaLabel="Username"
+            class="col-24"
+            inputContainerClasses="col-9 col-mb-24 col-xx-sm-24"
+            headerContainerClasses="text-right mod-justify-start col-4 form-label-vertical-align mod-padding-right-10 col-xx-sm-24"
+            containerClasses="mod-margin-bottom-10 mod-justify-left"
+            formErrorsContainerClassess="col-5"
+            placeholder=""
+        >
+        </neo-form-input>
+
+        <neo-checkbox
+            [formControl]="userForm.controls.isActive"
+            aut-id="edituser-active"
+            [ariaLabel]="'Active'"
+            customClasses="mod-margin-top-10"
+            caption="Active"
+        >
+        </neo-checkbox>
+
+        <ng-container *ngIf="userData.allowEditPassword">
+            <neo-form-input
+                formControlName="passwordInput"
+                [formControl]="userForm.controls.passwordInput"
+                autId="edituser-password"
+                caption="Password"
+                ariaLabel="Email notification feature is disabled, please notify this user of any password change."
+                type="password"
+                class="col-24"
+                inputClasses="field-required-border-left"
+                inputContainerClasses="col-9 col-mb-24 col-xx-sm-24"
+                headerContainerClasses="text-right mod-justify-start col-5 form-label-vertical-align mod-padding-right-10 col-xx-sm-24"
+                containerClasses="mod-margin-bottom-10 mod-margin-top-10 mod-justify-left"
+                formErrorsContainerClassess="col-5"
+                placeholder=""
+            >
+            </neo-form-input>
+        </ng-container>
+        <neo-single-select
+            formControlName="securityProfileId"
+            [formControl]="userForm.controls.securityProfileId"
+            autId="edituser-security-settigns"
+            itemLabelKey="name"
+            itemValueKey="entityId"
+            [settings]="securitySettings"
+            searchMode="none"
+            title="Click to choose security"
+            aria-label="Click to choose security"
+            [options]="userData.securityProfiles"
+            class="col-24"
+            inputContainerClasses="col-9 col-mb-24 col-xx-sm-24"
+            headerContainerClasses="text-left mod-justify-start col-5 form-label-vertical-align mod-padding-right-10 col-xx-sm-24"
+            formErrorsContainerClassess="col-5"
+            containerClasses="mod-margin-bottom-10 mod-margin-top-10 mod-justify-left"
+        >
+        </neo-single-select>
+
+        <ng-container
+            *ngIf="warningText"
+            class="row warning-text-margin mod-justify-left mod-margin-left-2 mod-margin-bottom-10"
+        >
+            <div class="col-mb-18 warning-text text-left warning-text">
+                <i class="icon icon-sm icon-warning warning-text"></i>
+                <span class="warning-text">{{ warningText }}</span>
+            </div>
+        </ng-container>
+
+        <div *ngIf="showDepartmentRadio" class="column mod-margin-top-10">
+            <neo-form-radio-group
+                caption="Departments"
+                labelClasses="mod-margin-left-10"
+                formControlName="allDepartmentsRadio"
+                id="department"
+                autId="edituser-type-department"
+                [dataSource]="departmentLabels"
+            >
+            </neo-form-radio-group>
+        </div>
+
+        <ng-container *ngIf="showDepartmentAccessMatrix">
+            <onboard-selection-list
+                [sort]="true"
+                autId="edituser-departments"
+                id="departments"
+                [source]="allDepartments"
+                [filter]="true"
+                listName="Departments"
+                [(destination)]="selectedDepartments"
+                inputListClasses="col-9 col-mb-10 col-xx-sm-10"
+                inputMoveButtonsClasses="col-1 col-mb-4 col-xx-sm-4"
+                [disabled]="false"
+            >
+            </onboard-selection-list>
+        </ng-container>
+    </div>
+</div>
+
+<div *ngIf="isAvailable" class="mod-display-flex mod-justify-end buttons">
+    <button
+        type="button"
+        class="btn btn--sm btn--link mod-margin-right-20"
+        aria-label="Click here to cancel and go back to previous page"
+        aut-id="edituser-cancel-btn"
+        [routerLink]="['/user']"
+    >
+        Cancel
+    </button>
+    <button
+        type="button"
+        class="btn btn--primary"
+        (click)="saveUser()"
+        [disabled]="!userForm.valid"
+        aria-label="Click here to save edituser details"
+        aut-id="edituser-save-btn"
+    >
+        Save
+    </button>
+</div>

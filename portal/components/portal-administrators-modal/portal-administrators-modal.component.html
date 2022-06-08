@@ -1,0 +1,31 @@
+<onboard-modal-with-route contentId="portal-admins-modal" #modal>
+    <onboard-modal-header [headerSize]="headerSize">
+        <h1 class="header-title" aut-id="portalSettings-modal-header">Administrators</h1>
+        <onboard-modal-actions>
+            <button
+                type="button"
+                tabindex="0" 
+                aut-id="portalSettings-close-modal-btn"
+                class="btn btn--link mod-margin-top-2"
+                aria-label="Close"
+                (click)="dismissModal()"
+            >
+                <i class="icon icon-close text-gray-2 icon-font-bold icon-focus-underline"></i>
+            </button>
+        </onboard-modal-actions>
+    </onboard-modal-header>
+    <onboard-modal-body>
+        <div class="modal-content mod-padding-8" #content>
+            <neo-grid-v2 *ngIf="isAvailable" [config]="gridConfig"></neo-grid-v2>
+            <ng-template #employeeTemplate let-dataItem="dataItem">
+                <onboard-entity-url
+                    [text]="dataItem.employeeNumber"
+                    [entityId]="dataItem.id"
+                    [autId]="'portalSettings-employee-' + dataItem.id"
+                    [ariaLabel]="'Employee number' + dataItem.employeeNumber + '. Click here to open employee details'"
+                    [entityType]="entityTypes.Employee"
+                ></onboard-entity-url>
+            </ng-template>
+        </div>
+    </onboard-modal-body>
+</onboard-modal-with-route>

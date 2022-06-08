@@ -1,0 +1,84 @@
+@import "../../../../../../external/patternlibrary-neogov/src/css/settings/color.variables.less";
+
+.edituser-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px 32px;
+    width: 100%;
+    height: 116px;
+    background: @outlineColorDarkBg;
+    border: 1px solid @gray-5;
+    .headline {
+        margin-top: 0px;
+        font-size: 32px;
+        line-height: 40px;
+    }
+}
+.employee-details {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: nowrap;
+}
+.label-username {
+    max-width: 120px;
+    min-width: 125px;
+    margin-bottom: 0;
+    margin-left: 2px;
+    @media screen and (max-width: 450px) {
+        min-width: 125px;
+        max-width: 125px;
+    }
+}
+.edituser-userdetails {
+    margin-top: 0px;
+    font-size: 24px;
+    line-height: 30px;
+}
+.userinfo-link {
+    color: @blue-alt-3;
+    font-size: 14px;
+    line-height: 24px;
+    margin-left: 3px;
+}
+.required-label-container {
+    margin-bottom: 24px;
+}
+.label-userid {
+    min-width: 90px;
+    margin-bottom: 0;
+    @media screen and (max-width: 450px) {
+        margin-left: 2px;
+        min-width: 125px;
+        max-width: 125px;
+    }
+}
+.user-detail {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    @media screen and (max-width: 450px) {
+        min-width: 100%;
+    }
+}
+.warning-text {
+    display: flex;
+    align-items: center;
+    color: @red-3;
+}
+.buttons {
+    margin-top: 24px;
+    margin-right: 32px;
+    margin-bottom: 68px;
+}
+.go-back-btn {
+    margin-bottom: 8px;
+}
+.edituser-form-container {
+    border-radius: 4px;
+    border: 1px solid @gray-5;
+    box-sizing: border-box;
+    background-color: @outlineColorDarkBg;
+    padding: 40px;
+    margin: 24px 32px;
+}

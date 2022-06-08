@@ -1,0 +1,356 @@
+<div aut-id="portalSettings-header" class="portal-settings-header">
+    <div class="go-back">
+        <a
+            [routerLink]="['/portal']"
+            aria-label="Click here to cancel and go back to previous page"
+            aut-id="portalSettings-goback-link"
+            class="btn btn--link btn--gray go-back-btn"
+        >
+            <i class="btn-link-icon icon icon-sm icon-arrow-left mod-margin-right-2"></i>
+            <span>Back to Portals</span>
+    </a>
+    </div>
+    <div *ngIf="isReady" class="navigate">
+        <h3 aut-id="portalSettings-headline" class="headline">Portal Settings</h3>
+        <div class="control">
+            <neo-tooltip text="Click to go back" container="body">
+                <a
+                    aut-id="portalSettings-back-link"
+                    [routerLink]="['/portal/portal-preview',portalId]"
+                    aria-label="Click here to go back"
+                    class="btn btn--link mod-margin-right-15 mod-margin-top-5"
+                >
+                    Back to {{ portal.title }}
+            </a>
+            </neo-tooltip>
+            <neo-tooltip text="Click to save portal settings" container="body">
+                <button
+                    type="button"
+                    [disabled]="!portalForm.valid"
+                    aria-label="Click here to save portal settings"
+                    (keydown.enter)="saveSettings()"
+                    (click)="saveSettings()"
+                    aut-id="portalSettings-save-btn"
+                    class="btn btn--white btn-save mod-margin-top-5"
+                >
+                    Save
+                </button>
+            </neo-tooltip>
+        </div>
+    </div>
+</div>
+<h1 aut-id="portalSettings-details" class="h3 details-headline">Details</h1>
+<div *ngIf="isReady" class="portal-settings-form-container">
+    <form [formGroup]="portalForm" class="row col-12 col-sm-24 mod-padding-left-none">
+        <div class="row col-24 col-sm-24 col-md-24 mod-align-center portal-details">
+            <div class="col-12 col-lg-12 portal-detail">
+                <label class="label-date" aut-id="portalSettings-date"> Date Created: </label>
+                <span class="col-14" id="employeeStartDate" aut-id="portalSettings-created-date">{{
+                    portal.dateCreated | date: dateFormat
+                }}</span>
+            </div>
+
+            <div class="col-10 text-left portal-detail">
+                <label class="label-createdby" aut-id="portalSettings-employee"> Created By: </label>
+                <neo-tooltip text="Click to see user detail" container="body">
+                    <a
+                        class="userinfo-link"
+                        [routerLink]="['/employee', portal.createdByEmployeeId]"
+                        title="Click to see user detail"
+                        aria-label="Click to see user detail"
+                        aut-id="portalSettings-employee-number"
+                    >
+                        {{ portal.updatedByName }}
+                    </a>
+                </neo-tooltip>
+            </div>
+        </div>
+        <neo-form-input
+            formControlName="title"
+            [formControl]="portalForm.controls.title"
+            autId="portalSettings-title"
+            caption="Portal Name"
+            ariaLabel="Portal Name"
+            class="col-24 form-title"
+            inputContainerClasses="col-24 col-sm-24 col-md-24"
+            headerContainerClasses="text-right mod-justify-start col-4 form-label-vertical-align mod-padding-right-10 col-md-24"
+            containerClasses="mod-margin-bottom-10 mod-margin-top-20 mod-justify-left"
+            formErrorsContainerClassess="col-5"
+            placeholder=""
+        >
+        </neo-form-input>
+    </form>
+</div>
+
+<div class="admin-control">
+    <h3 aut-id="portalSettings-administratorsHeader" class="details-headline mod-margin-none mod-margin-bottom-5">
+        Administrators
+    </h3>
+    <div *ngIf="isReady" class="mod-padding-right-5 mod-display-inline-block">
+        <neo-tooltip text="Click to view all the portal administrators" container="body">
+            <button
+                type="button"
+                class="btn btn--white mod-margin-right-10 grid-toolbar-blue mod-margin-bottom-5"
+                attr.aria-label="Click to view all the portal administrators ({{ portal.administratorsCount }})"
+                aut-id="portalSettings-viewAllAdministrators"
+                (keydown.enter)="viewAdmins()"
+                (click)="viewAdmins()"
+            >
+                View All ({{ portal.administratorsCount }})
+            </button>
+        </neo-tooltip>
+
+        <neo-tooltip text="Add portal Admin" container="body">
+            <button
+                type="button"
+                class="btn btn--white grid-toolbar-blue grid-toolbar-blue mod-margin-bottom-5"
+                (keydown.enter)="addPortalAdmin()"
+                (click)="addPortalAdmin()"
+                aria-label="Click to assign administrators"
+                aut-id="portalSettings-assignAdministrators"
+            >
+                <i class="icon icon-plus text-16 mod-margin-right-5 grid-toolbar-blue"></i>
+                Add Administrators
+            </button>
+        </neo-tooltip>
+    </div>
+</div>
+<div *ngIf="isReady && portal" class="portal-settings-form-container">
+    <div class="row mod-margin-left-1">
+        <div class="employee-details">
+            <onboard-administrator-user-roles [portalType]="portal.module"> </onboard-administrator-user-roles>
+            <div class="mod-margin-top-30">
+                <onboard-adminstrator-employees
+                    [updateGrid]="updateEmployeeGrid"
+                    (reload)="updatePortal()"
+                ></onboard-adminstrator-employees>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="portal && (!portal.isMainPortal || portal.isSeasonalPortal)" class="admin-control">
+    <h3 aut-id="portalSettings-assignmentsHeader" class="details-headline mod-margin-none mod-margin-bottom-5">
+        Assignments
+    </h3>
+    <div class="mod-padding-right-5 mod-display-inline-block portal-details">
+        <neo-tooltip text="Click to view all the portal assignments" container="body">
+            <button
+                type="button"
+                class="btn btn--white mod-margin-right-10 grid-toolbar-blue grid-toolbar-blue mod-margin-bottom-5"
+                attr.aria-label="Click to view all the portal assignments ({{ portal.assigneesCount }})"
+                aut-id="portalSettings-viewAllAssignments"
+                (click)="viewAssignees()"
+            >
+                View All ({{ portal.assigneesCount }})
+            </button>
+        </neo-tooltip>
+
+        <div *ngIf="!portal.isSeasonalPortal" class="dropdown float-right" ngbDropdown container="body">
+            <neo-tooltip text="Add portal Assignment" container="body">
+                <button
+                    type="button"
+                    *ngIf="!currentUserInfo.areDepartmentsPartiallyEnabled"
+                    class="btn btn--white grid-toolbar-blue grid-toolbar-blue mod-margin-bottom-5"
+                    ngbDropdownToggle
+                    aria-label="Add Assignments"
+                    href="javascript:;"
+                    aut-id="portal-settings-add-assignments"
+                >
+                    <i class="icon icon-plus text-16 mod-margin-right-5 grid-toolbar-blue"></i>
+                    Add Assignments
+                </button>
+            </neo-tooltip>
+            <ul *ngIf="customLabels" class="dropdown-menu" ngbDropdownMenu>
+                <li class="menu-link">
+                    <button
+                        ngbDropdownItem
+                        class="btn--link"
+                        tabindex="0"
+                        (keydown.enter)="newAssignment('Department')"
+                        attr.title="From {{ customLabels.departmentLabel }}"
+                        (click)="newAssignment('Department')"
+                        attr.aria-label="From {{ customLabels.departmentLabel }}"
+                        aut-id="portal-settings-assignment-department"
+                    >
+                        From {{ customLabels.departmentLabel }}
+                    </button>
+                </li>
+                <li class="menu-link">
+                    <button
+                        ngbDropdownItem
+                        class="btn--link"
+                        tabindex="0"
+                        (keydown.enter)="newAssignment('Division')"
+                        (click)="newAssignment('Division')"
+                        attr.aria-label="From {{ customLabels.divisionLabel }}"
+                        attr.title="From {{ customLabels.divisionLabel }}"
+                        aut-id="portal-settings-assignment-division"
+                    >
+                        From {{ customLabels.divisionLabel }}
+                    </button>
+                </li>
+                <li class="menu-link">
+                    <button
+                        ngbDropdownItem
+                        class="btn--link"
+                        tabindex="0"
+                        (keydown.enter)="newAssignment('Position')"
+                        title="From Position"
+                        (click)="newAssignment('Position')"
+                        aria-label="Authorize Pre-Hire"
+                        title="From Position"
+                        aut-id="portal-settings-assignment-position"
+                    >
+                        From Position
+                    </button>
+                </li>
+                <li class="menu-link">
+                    <button
+                        ngbDropdownItem
+                        class="btn--link"
+                        tabindex="0"
+                        (keydown.enter)="newAssignment('ClassSpec')"
+                        attr.title="From {{ customLabels.classSpecificationLabel }}"
+                        (click)="newAssignment('ClassSpec')"
+                        attr.aria-label="From {{ customLabels.classSpecificationLabel }}"
+                        title="Cool"
+                        aut-id="portal-settings-assignment-specification"
+                    >
+                        From {{ customLabels.classSpecificationLabel }}
+                    </button>
+                </li>
+                <li class="menu-link">
+                    <button
+                        ngbDropdownItem
+                        class="btn--link"
+                        tabindex="0"
+                        (keydown.enter)="newAssignment('PositionType')"
+                        title="From Position Type"
+                        (click)="newAssignment('PositionType')"
+                        aria-label="From Position Type"
+                        title="Cool"
+                        aut-id="portal-settings-assignment-positionType"
+                    >
+                        From Position Type
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div *ngIf="portal.isSeasonalPortal" class="dropdown float-right" ngbDropdown container="body">
+            <neo-tooltip text="Add portal Assignment" container="body">
+                <button
+                    type="button"
+                    class="btn btn--white grid-toolbar-blue"
+                    ngbDropdownToggle
+                    aria-label="Add Assignments"
+                    href="javascript:;"
+                    aut-id="portal-settings-add-assignments"
+                >
+                    <i class="icon icon-plus text-16 mod-margin-right-5 grid-toolbar-blue"></i>
+                    Add Assignments
+                </button>
+            </neo-tooltip>
+            <ul class="dropdown-menu" ngbDropdownMenu>
+                <li class="menu-link">
+                    <button
+                        ngbDropdownItem
+                        class="btn--link"
+                        tabindex="0"
+                        (keydown.enter)="newAssignment('PositionType')"
+                        title="From Position Type"
+                        (click)="newAssignment('PositionType')"
+                        aria-label="From Position Type"
+                        title="Cool"
+                        aut-id="portal-settings-assignment-positionType"
+                    >
+                        From Position Type
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div *ngIf="isReady && portal" class="portal-settings-form-container">
+    <div class="row mod-margin-left-1">
+        <ng-container *ngIf="portal.departmentsVisible">
+            <div class="employee-details mod-margin-bottom-30">
+                <onboard-portal-assignments
+                    [portalModule]="portal.module"
+                    (reload)="updatePortal()"
+                    [updateGrid]="updateAssignDepartmentGrid"
+                    [entityType]="assignmentsDepartment"
+                    [title]="customLabels.departmentLabel"
+                >
+                </onboard-portal-assignments>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="portal.divisionsVisible">
+            <div class="row and">
+                <span>{{ getLogicalOperatorText() }}</span>
+            </div>
+            <div class="employee-details mod-margin-bottom-30">
+                <onboard-portal-assignments
+                    [portalModule]="portal.module"
+                    (reload)="updatePortal()"
+                    [updateGrid]="updateAssignDivisionGrid"
+                    [entityType]="assignmentsDivision"
+                    [title]="customLabels.divisionLabel"
+                >
+                </onboard-portal-assignments>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="portal.positionsVisible">
+            <div class="row and">
+                <span>{{ getLogicalOperatorText() }}</span>
+            </div>
+            <div class="mod-margin-bottom-30">
+                <onboard-portal-assignments
+                    [portalModule]="portal.module"
+                    (reload)="updatePortal()"
+                    [updateGrid]="updateAssignPositionGrid"
+                    [entityType]="assignmentsPosition"
+                    title="Position"
+                >
+                </onboard-portal-assignments>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="portal.classSpecificationsVisible">
+            <div class="row and">
+                <span>{{ getLogicalOperatorText() }}</span>
+            </div>
+            <div class="mod-margin-bottom-30">
+                <onboard-portal-assignments
+                    [portalModule]="portal.module"
+                    (reload)="updatePortal()"
+                    [updateGrid]="updateAssignClassSpecGrid"
+                    [entityType]="assignmentsClassSpec"
+                    [title]="customLabels.classSpecificationLabel"
+                >
+                </onboard-portal-assignments>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="portal.positionTypesVisible">
+            <div class="row and">
+                <span>{{ getLogicalOperatorText() }}</span>
+            </div>
+            <div class="employee-details mod-margin-bottom-30">
+                <onboard-portal-assignments
+                    [portalModule]="portal.module"
+                    (reload)="updatePortal()"
+                    [updateGrid]="updateAssignPositionTypeGrid"
+                    [entityType]="assignmentsPositionType"
+                    title="Position Type"
+                >
+                </onboard-portal-assignments>
+            </div>
+        </ng-container>
+        
+    </div>
+</div>
+
+<router-outlet (deactivate)="onModalClosed($event)"></router-outlet>

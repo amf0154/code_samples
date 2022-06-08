@@ -1,0 +1,21 @@
+<neo-loader-wrapper [model]="loadingModel" source="assets/spinner.gif">
+    <h1 aut-id="portalSettings-userRolesHeader" class="text-24 mod-margin-none">User Roles</h1>
+    <neo-grid-v2 *ngIf="isReady" #userRolesGrid [config]="gridConfig"></neo-grid-v2>
+    <ng-template #actionsTemplate let-dataItem="dataItem">
+        <div class="action-buttons">
+            <neo-tooltip [text]="'View assignees'">
+                <button
+                    type="button"
+                    class="btn btn--link"
+                    (keydown.enter)="viewAssignees(dataItem.entityId)"
+                    (click)="viewAssignees(dataItem.entityId)"
+                    attr.aut-id="portalSettings-assignees-{{ dataItem.id }}"
+                    aria-label="View assignees"
+                    title="View assignees"
+                >
+                    <i class="icon icon-sm icon-show"></i>
+                </button>
+            </neo-tooltip>
+        </div>
+    </ng-template>
+</neo-loader-wrapper>

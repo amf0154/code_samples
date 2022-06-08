@@ -1,0 +1,37 @@
+<onboard-modal-with-route contentId="portal-add-admin-modal" #modal>
+    <onboard-modal-header>
+        <h1 class="header-title" aut-id="portal-add-admin-header">Assign Employee</h1>
+        <onboard-modal-actions>
+            <button
+                type="button"
+                class="btn btn--link btn--white mod-margin-right-15"
+                aut-id="close-portal-add-admin-modal-btn"
+                (keydown.enter)="dismissModal()"
+                (click)="dismissModal()"
+                aria-label="Click here to close the modal"
+            >
+                Cancel
+            </button>
+            <button
+                type="button"
+                class="btn btn--primary"
+                aut-id="close-portal-add-admin-modal-btn"
+                (keydown.enter)="addAssignment()"
+                (click)="addAssignment()"
+                aria-label="Click here to close the modal"
+            >
+                Add
+            </button>
+        </onboard-modal-actions>
+    </onboard-modal-header>
+
+    <onboard-modal-body>
+        <div class="modal-content mod-padding-8" #content>
+            <neo-grid-v2 *ngIf="isAvailable" #tableGrid [config]="gridConfig"></neo-grid-v2>
+            <span class="note-msg"
+                >Note: Adding additional assignments will require an employee to belong to a role listed in each
+                section.</span
+            >
+        </div>
+    </onboard-modal-body>
+</onboard-modal-with-route>

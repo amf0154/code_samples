@@ -1,0 +1,11 @@
+<div class="userlist-container">
+    <neo-loader-wrapper [model]="loadingModel" source="assets/spinner.gif">
+        <h1 aut-id="userList-header" class="text-24 mod-margin-top-15 mod-margin-bottom-10">User List</h1>
+        <neo-grid-v2 *ngIf="isReady" #userGrid [config]="gridConfig"></neo-grid-v2>
+    </neo-loader-wrapper>
+    <onboard-userlist-templates
+        [userGrid]="userGrid"
+        [loadingModel]="loadingModel"
+        #templates
+    ></onboard-userlist-templates>
+</div>

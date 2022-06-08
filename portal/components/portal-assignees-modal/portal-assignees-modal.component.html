@@ -1,0 +1,91 @@
+<onboard-modal-with-route contentId="portalSettings-modal" #modal>
+    <onboard-modal-header [headerSize]="headerSize">
+        <h1 class="header-title" aut-id="portalSettings-modal-header">Assignees</h1>
+        <onboard-modal-actions>
+            <button
+                type="button"
+                tabindex="0"
+                aut-id="portalSettings-close-modal-btn"
+                class="btn btn--link mod-margin-top-2 icon-focus-underline"
+                aria-label="Close"
+                (click)="dismissModal()"
+            >
+                <i class="icon icon-close text-gray-2 icon-font-bold"></i>
+            </button>
+        </onboard-modal-actions>
+    </onboard-modal-header>
+    <onboard-modal-body>
+        <div class="modal-content mod-padding-8" #content>
+            <neo-grid-v2 *ngIf="isAvailable" [config]="gridConfig"></neo-grid-v2>
+            <ng-template #photoTemplate let-dataItem="dataItem">
+                <neo-employee-photo
+                    [options]="getEmployeePhoto(dataItem)"
+                    [routerLink]="['./employee-detail', dataItem.id]"
+                    class="mod-cursor-pointer"
+                >
+                </neo-employee-photo>
+            </ng-template>
+            <ng-template #employeeNumberTemplate let-dataItem="dataItem">
+                <ng-container *ngIf="dataItem.isHired">
+                    <onboard-entity-url
+                        [text]="dataItem.employeeNumber"
+                        [entityId]="dataItem.userId"
+                        [autId]="'portalSettings-employeeNumber-' + dataItem.userId"
+                        [ariaLabel]="
+                            'Assignee employeeNumber' + dataItem.userId + '. Click here to open assignee details'
+                        "
+                        [entityType]="entityTypes.Employee"
+                    ></onboard-entity-url>
+                </ng-container>
+            </ng-template>
+            <ng-template #lastNameTemplate let-dataItem="dataItem">
+                <onboard-entity-url
+                    [text]="dataItem.lastName"
+                    [entityId]="dataItem.userId"
+                    [autId]="'portalSettings-lastName-' + dataItem.userId"
+                    [ariaLabel]="'Assignee lastName' + dataItem.lastName + '. Click here to open assignee details'"
+                    [entityType]="entityTypes.Employee"
+                ></onboard-entity-url>
+            </ng-template>
+            <ng-template #firstNameTemplate let-dataItem="dataItem">
+                <onboard-entity-url
+                    [text]="dataItem.firstName"
+                    [entityId]="dataItem.userId"
+                    [autId]="'portalSettings-firstName-' + dataItem.userId"
+                    [ariaLabel]="'Assignee firstName' + dataItem.userId + '. Click here to open assignee details'"
+                    [entityType]="entityTypes.Employee"
+                ></onboard-entity-url>
+            </ng-template>
+            <ng-template #directManagerTemplate let-dataItem="dataItem">
+                <onboard-entity-url
+                    [text]="dataItem.managerFullName"
+                    [entityId]="dataItem.managerId"
+                    [autId]="'portalSettings-direct-manager-' + dataItem.managerFullName"
+                    [ariaLabel]="'Click here to open manager details of ' + dataItem.managerFullName"
+                    [entityType]="entityTypes.Employee"
+                ></onboard-entity-url>
+            </ng-template>
+            <ng-template #positionTitleTemplate let-dataItem="dataItem">
+                <onboard-entity-url
+                    [entityType]="entityTypes.Position"
+                    [entityId]="dataItem.positionId"
+                    [text]="dataItem.positionTitle"
+                    autId="portalSettings-position-title-details"
+                >
+                </onboard-entity-url>
+            </ng-template>
+
+            <ng-template #departmentNameTemplate let-dataItem="dataItem">
+                <onboard-entity-url
+                    [entityType]="entityTypes.Department"
+                    [entityId]="dataItem.departmentId"
+                    [text]="dataItem.departmentName"
+                    [readOnly]="!dataItem.departmentId || currentUserInfo.isImpersonated"
+                    autId="portalSettings-department-name-details"
+                >
+                </onboard-entity-url>
+            </ng-template>
+
+        </div>
+    </onboard-modal-body>
+</onboard-modal-with-route>

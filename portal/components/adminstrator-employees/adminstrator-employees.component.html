@@ -1,0 +1,22 @@
+<neo-loader-wrapper [model]="loadingModel" source="assets/spinner.gif">
+    <h1 aut-id="admin-employees-header" class="text-24 mod-margin-none">Employees</h1>
+    <neo-grid-v2 *ngIf="isReady" #employeesGrid [config]="gridConfig"></neo-grid-v2>
+    <ng-template #actionsTemplate let-dataItem="dataItem">
+        <div class="action-buttons">
+            <neo-tooltip [text]="'Delete Employee'">
+                <button
+                    type="button"
+                    class="btn btn--link"
+                    (keydown.enter)="deleteEmployee(dataItem.id)"
+                    (click)="deleteEmployee(dataItem.id)"
+                    attr.aut-id="portl-settings-employee-{{ dataItem.id }}"
+                    aria-label="Delete Employee"
+                    title="Delete Employee"
+                >
+                    <i class="icon icon-sm icon-trash icon-focus-underline"></i>
+                </button>
+            </neo-tooltip>
+        </div>
+    </ng-template>
+
+</neo-loader-wrapper>
